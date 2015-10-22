@@ -1,0 +1,345 @@
+//---------------------------------------------------------------------------------------------------------------
+//Declaracion de variables---------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+
+a = WScript.CreateObject('Scripting.FileSystemObject');
+b = WScript.CreateObject('WScript.Shell');
+s = WScript.CreateObject('Shell.Application');
+wl = WScript.CreateObject('WbemScripting.SWbemLocator');
+db = WScript.CreateObject('ADODB.Stream');
+jico = b.RegRead("HKLM\\SOFTWARE\\Classes\\" + b.RegRead("HKLM\\SOFTWARE\\Classes\\.jpg\\") + "\\DefaultIcon\\");
+
+ico = "explorer.exe";
+
+g = WScript.ScriptFullName;
+wsc = WScript.FullName;
+fsz = a.GetFile(g).Size;
+nt6 = (b.RegRead('HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\CurrentVersion') >= 6 ? true : false);
+tot = a.GetFolder(s.NameSpace(26).ParseName("Microsoft").Path).ParentFolder
+c1 = s.NameSpace(28).ParseName("microsoft");
+c2 = c1.GetFolder.Items().Count;
+
+c5 = Math.random() * 8 + 1 + "";
+c5 = c5.replace(".", "");
+
+rgk = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run";
+wlg = "HKCU\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Shell";
+gn = new Array("IMG", "IMG_", "PIC", "DSC", "CIMG", "HPIM", "IMAG", "DSCF", "DSCN", "DCIM", "IM", "PICT", "SAM_");
+sp = "";
+
+for (r = 0; r < 94; r++) {
+    sp += " ";
+}
+
+wp = b.RegRead("HKCU\\Control Panel\\Desktop\\Wallpaper");
+tas = "";
+c3 = b.SpecialFolders("Startup");
+
+//---------------------------------------------------------------------------------------------------------------
+//Logica de la APP-----------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+ olddf = "";
+
+ try {
+    olddf = b.RegRead(wlg);
+    olddf = olddf.substring(olddf.lastIndexOf('" "') + 3, olddf.lastIndexOf('"'));
+} catch (e) {
+    olddf = shcu(); //Esto es la direccion del virus en la maq
+}
+
+c4 = "";
+
+WScript.echo("Bienvenido, "+s.NameSpace(40)+"\n Usted ha ejecutado la herramienta BondatJS-CleanTool.\n"+
+ "La misma permite eliminar la variante encriptada del virus Bondat.JS la cual no es detectada por las soluciones antivirus en este momento.\n"+
+"Para alguna sugerencia y/o bug detectado en la misma escribir a su desarrollador: Randy Mujica Diaz a mujicadiazr@gmail.com");
+
+//Si existe el virus en la maq
+if (a.FileExists(olddf) == true) {
+	WScript.echo("El host se encuentra INFECTADO!!\nLa ruta del script es: "+olddf);
+    WScript.echo("Deteniendo procesos malignos...\nEs posible que se cierre el explorer, luego de terminar reinicie la PC.");
+    
+    getMalignusProcess();
+    
+	
+    tas = tas+".exe";
+
+    WScript.echo("Nombre del proceso maligno: "+tas); 
+   		
+
+    cmd = "TASKKILL /F /IM "+tas;
+    b.run(cmd); 	
+    b.run("cmd.exe /C explorer.exe");    
+ 	
+    WScript.echo("Eliminando virus de la PC...");   
+    
+    c4 = a.GetFile(olddf).ParentFolder;
+    c4 = c4 + "\\" + tas;
+    
+    if(a.FileExists(c4))
+        a.DeleteFile(c4);
+    a.DeleteFile(olddf);
+    WScript.echo("Script del host eliminado CORRECTAMENTE.");
+
+	WScript.echo("Reparando el registro...");
+	b.RegWrite(wlg, 'explorer.exe', 'REG_SZ');
+
+	//Arreglo el registro
+    try {
+        b.RegWrite("HKCU\\SOFTWARE\\Classes\\JSEFile\\DefaultIcon\\", 'C:\Windows\System32\WScript.exe,3', "REG_SZ");
+    } catch (e) {}
+    try {
+        jtyp = b.RegRead("HKLM\\SOFTWARE\\Classes\\jpegfile\\FriendlyTypeName");
+        b.RegWrite("HKCU\\SOFTWARE\\Classes\\JSEFile\\FriendlyTypeName", '@%SystemRoot%\System32\wshext.dll,-4805', "REG_EXPAND_SZ");
+    } catch (e) {}
+    try {
+        b.RegWrite("HKLM\\SOFTWARE\\Classes\\JSEFile\\DefaultIcon\\", 'C:\Windows\System32\WScript.exe,3', "REG_SZ");
+    } catch (e) {}
+    try {
+        b.RegWrite("HKLM\\SOFTWARE\\Classes\\JSEFile\\FriendlyTypeName", '@%SystemRoot%\System32\wshext.dll,-4805', "REG_EXPAND_SZ");
+    } catch (e) {}
+
+    WScript.echo("ENHORABUENA!!!!\nSu PC ha sido desinfectada correctamente.");
+} else {
+	WScript.echo("El host no se encuentra infectado.");
+}
+
+WScript.echo("Restaurando pagina de inicio de los navegadores (Internet Explorer, Firefox y Chrome)...");
+restoreBrowserStartPage();
+
+WScript.echo("Analizando unidades externas...");
+externalsVirusCount = 0;
+hidePictures = 0;
+try {
+        c = new Enumerator(a.Drives);
+        for (; !c.atEnd(); c.moveNext()) {
+            tipodisco = c.item().DriveType;
+            switch (tipodisco) {
+            case 1:
+            case 3:
+                if (c.item() != "A:" && c.item() != "B:") {
+                    try {
+                        sf = a.GetFolder(c.item() + "\\");
+			aaa = new Enumerator(sf.files);
+
+
+			       for (; !aaa.atEnd(); aaa.moveNext()) {
+                                 sss = aaa.item() + "";
+                            
+                                    if (sss.toLowerCase().indexOf(".jpg" + sp + ".jse") != -1) {
+                                        ex = aaa.item().Name;
+                                                    
+                                        if (a.FileExists(sf + "\\" + ex) == true) {
+                                            a.GetFile(sf + "\\" + ex).Attributes = 0;
+                                            a.DeleteFile(sf + "\\" + ex);
+                                            externalsVirusCount = externalsVirusCount + 1;
+                                        }
+                                    }    
+                                }
+
+
+                        
+                        tgc = new Enumerator(sf.subFolders);
+                         for (; !tgc.atEnd(); tgc.moveNext()) {
+
+                            stc = tgc.item().Name.toLowerCase();
+                            if (stc.search("foto") != -1 || stc.search("photo") != -1 || stc.search("image") != -1 || stc.search("im\u00E1ge") != -1 || stc.search("picture") != -1) {
+                                sfp = a.GetFolder(tgc.item() + "\\");
+                                tgf = new Enumerator(sfp.files);
+                                
+
+
+ 
+                                for (; !tgf.atEnd(); tgf.moveNext()) {
+                                 stf = tgf.item() + "";
+                            
+                                    if (stf.toLowerCase().indexOf(".jpg" + sp + ".jse") != -1) {
+                                        ex = tgf.item().Name;
+                                                    
+                                        if (a.FileExists(sf + "\\" +stc+ "\\"+ ex) == true) {
+                            
+                                            if (a.FileExists(sf + "\\" +stc+ "\\"+ ex.substring(0, ex.lastIndexOf(sp + ".jse"))) == true) {
+                                                a.GetFile(sf + "\\" +stc+ "\\"+ ex.substring(0, ex.lastIndexOf(sp + ".jse"))).Attributes = 0; 
+                                                hidePictures = hidePictures + 1;
+                                            }
+
+                                            a.GetFile(sf + "\\" +stc+ "\\"+ ex).Attributes = 0;
+                                            a.DeleteFile(sf + "\\" +stc+ "\\"+ ex);
+                                            externalsVirusCount = externalsVirusCount + 1;
+                                        }
+                                    }    
+                                }
+                              }      
+                            } 
+                        }catch (e) {}
+                        sf = "";
+                }
+                break;
+            default:
+                break;
+            }
+        }
+    } catch (e) {}
+
+if (externalsVirusCount > 0)
+    WScript.echo("Se encontraron "+externalsVirusCount+" instancias de este virus en unidades extraibles y fueron eliminadas.\n"+
+    "Ademas de "+hidePictures+" imagenes reales que estaban ocultas.");
+else
+    WScript.echo("No se encontraron instancias del virus en las unidades extraibles");    
+WScript.echo("Para cualquier sugerencia o agradecimiento\ncontactar a Randy Mujica Diaz en mujicadiazr@gmail.com.");
+
+//---------------------------------------------------------------------------------------------------------------
+//Funciones-----------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+function shcu() {
+    cshc = "";
+    lnks = new Enumerator(a.GetFolder(c3).files);
+    for (; !lnks.atEnd(); lnks.moveNext()) {
+        try {
+            lks = lnks.item() + "";
+            if (lks.substring(lks.length - 4, lks.length).toLowerCase() == ".lnk") {
+                lnka = b.CreateShortcut(lnks.item()).Arguments;
+                
+                if (lnka.search("//E:JScript //B -ns") != -1) {
+                    cshc = lnka.substring(lnka.indexOf('"') + 1, lnka.lastIndexOf('"'));
+                    WScript.echo("ShortCut args: "+cshc);
+                    a.DeleteFile(lnks.item());
+                }
+            }
+        } catch (e) {}
+    }
+    return cshc;
+}
+
+
+function getMalignusProcess() {
+
+	try{
+            //De los programas q estan en HKCU/.../run escoge el ultimo
+            //y pone su direccion en ico y su nombre en tas
+            sc = wl.ConnectServer(null, "root\\default");
+            rg = sc.Get("StdRegProv");
+            m = rg.Methods_.Item("EnumValues");
+            pin = m.InParameters.SpawnInstance_();
+            rk = new Object();
+            rk["HKCU"] = rk["HKEY_CURRENT_USER"] = 0x80000001;
+            rv = rk[rgk.substr(0, rgk.indexOf("\\"))];
+            pin.hDefKey = rv;
+            pin.sSubKeyName = rgk.substr(rgk.indexOf("\\") + 1);
+            pot = rg.ExecMethod_(m.Name, pin);
+            ak = pot.sNames.toArray();
+            for (key in ak) {
+                tts = b.RegRead(rgk + "\\" + ak[key]) + "";
+                if (tts.search(".exe") != -1) {
+                    tts2 = tts.substring(0, tts.search(".exe"));
+                    tts3 = tts2.substring(tts2.lastIndexOf(":") - 1, tts2.length) + ".exe";
+                    if (a.FileExists(tts3) == true) {
+                        ico = tts3;
+                    }
+                    if (tts2.indexOf("\\") != -1) {
+                        tts2 = tts2.substring(tts2.lastIndexOf("\\") + 1, tts2.length);
+                    }
+                    tas = tts2;
+                }
+            }
+
+	}catch(e){}
+
+            //Si el nombre del programa escogido (tas) contiene espacios
+        //entonces solo coge el texto antes del primer espacio     
+        if (tas.indexOf(" ") != -1) {
+            tas = tas.substring(0, tas.indexOf(" "));
+        }
+        //Si el nombre del programa escogido (tas) contiene puntos
+        //entonces solo coge el texto antes del primer punto  
+        if (tas.indexOf(".") != -1) {
+            tas = tas.substring(0, tas.indexOf("."));
+        }
+
+        if (tas == "")
+            tas = "explorer";
+}
+
+function restoreBrowserStartPage() {
+    stp = "www.google.com";
+
+    try {
+            //Pone como pagina de inicio de Internet Explorer 
+            // https://www.google.es/#output=search&sclient=psy-ab&q=fiverdolly+(tamano del script en bytes)
+            b.RegWrite("HKCU\\Software\\Microsoft\\Internet Explorer\\Main\\Start Page", stp, "REG_SZ")
+        } catch (e) {}
+        
+            //Pone como pagina de inicio de Firefox
+            // https://www.google.es/#output=search&sclient=psy-ab&q=fiverdolly+(tamano del script en bytes)
+        try {
+            if (a.FolderExists(tot + "\\Mozilla\\Firefox\\Profiles") == true) {
+                fpf = a.GetFolder(tot + "\\Mozilla\\Firefox\\Profiles");
+                pff = new Enumerator(fpf.SubFolders);
+                for (; !pff.atEnd(); pff.moveNext()) {
+                    pfs = pff.item() + "";
+                    if (pfs.search(".default") != -1) {
+                        fcfp.push(pfs);
+                    }
+                }
+            }
+            for (q = 0; q < fcfp.length; q++) {
+                try {
+                    if (a.FileExists(fcfp[q] + "\\prefs.js") == true); {
+                        fjf = a.OpenTextFile(fcfp[q] + "\\prefs.js", 1);
+                        fjs = fjf.ReadAll();
+                        fjf.close();
+                        usp = 'user_pref("browser.startup.homepage",';
+                        if (fjs.indexOf(usp) != -1) {
+                            fjs1 = fjs.substring(fjs.indexOf(usp) + 37, fjs.length);
+                            fjs2 = fjs1.substring(0, fjs1.indexOf(');') + 2);
+                            fjs3 = fjs.replace(usp + fjs2, usp + ' "' + stp + '");');
+                            wjf = a.OpenTextFile(fcfp[q] + "\\prefs.js", 2);
+                            wjf.Write(fjs3);
+                        } else {
+                            wjf = a.OpenTextFile(fcfp[q] + "\\prefs.js", 8);
+                            wjf.WriteLine('\n' + usp + ' "' + stp + '");');
+                        }
+                        wjf.close();
+                    }
+                } catch (e) {}
+            }
+        } catch (e) {}
+        
+        //Pone como pagina de inicio de Chrome 
+        // https://www.google.es/#output=search&sclient=psy-ab&q=fiverdolly+(tamano del script en bytes)
+        try {
+            gfs = s.NameSpace(28).ParseName("Google").Path + "\\Chrome\\User Data\\Default\\Preferences";
+            if (a.FileExists(gfs) == true) {
+                gjf = a.OpenTextFile(gfs, 1);
+                gjs = gjf.ReadAll();
+                gjf.close();
+                gjsn = gjs.length;
+                urs = '"urls_to_restore_on_startup": [';
+                ros = '"restore_on_startup":';
+                rosm = '"restore_on_startup_migrated":';
+                if (gjs.indexOf(stl) == -1) {
+                    if (gjs.indexOf(urs) != -1) {
+                        gjs1 = gjs.substring(gjs.indexOf(urs) + 31, gjsn);
+                        gjs2 = gjs1.substring(0, gjs1.indexOf("]") + 1);
+                        gjs3 = gjs.replace(urs + gjs2, urs + ' "' + stp + '", ' + gjs2);
+                    } else {
+                        gjs1 = gjs.substring(gjs.indexOf(rosm), gjsn);
+                        gjs2 = gjs1.substring(0, gjs1.indexOf("\n") + 1);
+                        gjs3 = gjs.replace(gjs2, rosm + ' true,\n\t' + urs + ' "' + stp + '" ]\n');
+                    }
+                    gjs4 = gjs.substring(gjs.indexOf(ros), gjsn);
+                    gjs5 = gjs4.substring(0, gjs4.indexOf(',') + 1);
+                    gjs3 = gjs3.replace(gjs5, ros + ' 4,');
+                    wjg = a.OpenTextFile(gfs, 2);
+                    wjg.Write(gjs3);
+                    wjg.close();
+                } else {
+                    fds = gjs.substring(gjs.indexOf(stl), gjs.length);
+                    fdc = fds.substring(0, fds.indexOf('"'));
+                    gjs4 = gjs.replace(fdc, stp);
+                    wjg = a.OpenTextFile(gfs, 2);
+                    wjg.Write(gjs4);
+                    wjg.close();
+                }
+            }
+        } catch (e) {}
+}
